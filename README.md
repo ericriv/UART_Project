@@ -64,13 +64,13 @@ This project demonstrates RTL design skills and SystemVerilog/UVM verification p
   - Random TX and RX overlap (full duplex stress test)
   
 ## Status
-- [x] UART TX RTL + directed testbench
+- [ ] UART TX RTL + directed testbench
 - [ ] UART RX RTL + directed testbench
 - [ ] UART Full Duplex RTL + UVM testbench
 - [ ] Randomized testing + coverage collection
 
 
 ## Future Work
-- Add parity support (even/odd)
+- Add parity support (even/odd or hamming weight)
 - Add configurable data length (7/8/9 bits)
 - Add integration test with loopback mode (TX → RX directly)
