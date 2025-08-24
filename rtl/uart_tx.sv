@@ -18,6 +18,9 @@ output	logic			tx_busy
 	logic	[31:0]	baud_cnt;
 	logic	[2:0]	bit_index;
 	logic	[7:0]	shifter;
+	logic			baud_tick;
+	
+	assign baud_tick = (baud_cnt == DIVISOR-1);
 
 	always_ff @(posedge clk or negedge rst_) begin
 		if(!rst_) begin

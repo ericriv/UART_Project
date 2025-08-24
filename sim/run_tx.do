@@ -9,8 +9,9 @@ vlib work
 
 # Compile RTL, assertions, and testbench
 vlog -sv ../rtl/uart_tx.sv
-vlog -sv ../assertions/uart_tx_sva.sv
 vlog -sv ../tb/uart_tx_tb.sv
+vlog -sv ../assertions/uart_tx_sva.sv
+
 
 # Run simulation (with limited optimization for waveform viewing)
 vsim -voptargs=+acc work.uart_tx_tb 
