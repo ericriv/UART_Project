@@ -71,7 +71,7 @@ output	logic			tx_busy
 			
 			STOP: begin
 				tx_serial <= 1; //drive high to end
-				if(baud_cnt <= DIVISOR-1) begin
+				if(baud_cnt == DIVISOR-1) begin
 					state <= IDLE;
 					baud_cnt <= 0;
 				end else

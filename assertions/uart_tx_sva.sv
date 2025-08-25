@@ -46,4 +46,12 @@ endproperty
 stop_bit_checkP: assert property (stop_bit_check) else $display($stime,"\t\t FAIL::stop_bit_check\n");
 stop_bit_checkC: cover property (stop_bit_check) $display($stime,"\t\t PASS::stop_bit_check\n");
 
+property stable_bit_check;
+	@(posedge clk) disable iff(!rst_)
+		(`baud_tick && tx_busy |-> ##1 $stable(tx_serial) until_with `baud_tick);
+endproperty
+stable_bit_checkP: assert property (stable_bit_check) else $display($stime, "\t\t FAIL::stable_bit_check\n");
+stable_bit_checkC: cover property (stable_bit_check) $display($stime, "\t\t PASS::stable_bit_check\n");
+
+
 endmodule 
