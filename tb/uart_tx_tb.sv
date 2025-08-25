@@ -27,8 +27,20 @@ module uart_tx_tb;
 	rst_ = 1;
 	tx_start = 0;
 	tx_data = 0;
+	
+	//reset and basic direct tests
 	reset_uart;
-	start_uart(8'h88);
+	start_uart(8'hFF);
+	start_uart(8'h00);
+	reset_uart;
+	
+	//random input tests
+	repeat($urandom_range(10,50)) begin
+		start_uart($urandom_range(0,255));
+	end
+	
+	//bug injection tests
+	start_uart_start_bug(8'h31);
 	repeat(5) @(posedge clk);
 	$stop;
 	end //initial
@@ -55,6 +67,7 @@ module uart_tx_tb;
 	
 	task automatic start_uart(input logic [7:0] val);
 		logic expected;
+		@(negedge clk);
 		tx_data = val;
 		tx_start = 1;
 		ref_q.push_front(1);
@@ -69,6 +82,33 @@ module uart_tx_tb;
 			expected = ref_q.pop_front;
 			if(tx_serial != expected) $error("Scoreboard mismatch! Expected %0d, got %0d", expected, tx_serial);
 		end
+		@(negedge clk);
+	endtask
+	
+	task automatic start_uart_start_bug(input logic [7:0] val);
+		logic expected;
+		@(negedge clk);
+		tx_data = val;
+		tx_start = 1;
+		ref_q.push_front(1);
+		foreach(val[i]) begin
+			ref_q.push_front(val[i]);
+		end
+		ref_q.push_front(0);
+		repeat(2)@(negedge clk)
+		tx_start = 0;
+		for(int i = 0; i < 10; i++) begin
+			@(posedge `baud_tick)
+			expected = ref_q.pop_front;
+			if(tx_serial != expected) $error("Scoreboard mismatch! Expected %0d, got %0d", expected, tx_serial);
+			if(i == 5) begin
+				@(negedge clk);
+				tx_start = 1;
+				repeat(2) @(negedge clk);
+				tx_start = 0;
+			end
+		end
+		@(negedge clk);
 	endtask
 
 

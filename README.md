@@ -64,7 +64,7 @@ This project demonstrates RTL design skills and SystemVerilog/UVM verification p
   - Random TX and RX overlap (full duplex stress test)
   
 ## Status
-- [ ] UART TX RTL + directed testbench
+- [x] UART TX RTL + directed testbench
 - [ ] UART RX RTL + directed testbench
 - [ ] UART Full Duplex RTL + UVM testbench
 - [ ] Randomized testing + coverage collection

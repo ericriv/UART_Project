@@ -53,5 +53,26 @@ endproperty
 stable_bit_checkP: assert property (stable_bit_check) else $display($stime, "\t\t FAIL::stable_bit_check\n");
 stable_bit_checkC: cover property (stable_bit_check) $display($stime, "\t\t PASS::stable_bit_check\n");
 
+property busy_check;
+	@(posedge clk) disable iff(!rst_)
+		(tx_start |-> ##1 (tx_busy throughout (`state != 2'b00)));
+endproperty
+busy_checkP: assert property (busy_check) else $display($stime, "\t\t FAIL::busy_check\n");
+busy_checkC: cover property (busy_check) $display($stime, "\t\t PASS::busy_check\n");
+
+property busy_start_check;
+	@(posedge clk) disable iff(!rst_)
+		(tx_start && tx_busy && !`baud_tick |-> ##1 $stable(`state));
+endproperty
+busy_start_checkP: assert property (busy_start_check) else $display($stime,"\t\t FAIL::busy_start_check\n");
+busy_start_checkC: cover property (busy_start_check) $display($stime,"\t\t PASS::busy_start_check\n");
+
+property no_restart_check;
+	@(posedge clk) disable iff(!rst_)
+		(tx_start && tx_busy && !`baud_tick |-> ##1 $stable(`shifter));
+endproperty
+no_restart_checkP: assert property (no_restart_check) else $display($stime,"\t\t FAIL::no_restart_check\n");
+no_restart_checkC: cover property (no_restart_check) $display($stime,"\t\t PASS::no_restart_check\n");
+
 
 endmodule 

@@ -74,6 +74,7 @@ output	logic			tx_busy
 				if(baud_cnt == DIVISOR-1) begin
 					state <= IDLE;
 					baud_cnt <= 0;
+					tx_busy <= 0;
 				end else
 					baud_cnt = baud_cnt + 1;
 			end //STOP
