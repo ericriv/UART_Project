@@ -21,6 +21,7 @@ output	logic			rx_error
 	logic			sample_tick;
 	
 	assign sample_tick = (baud_cnt == DIVISOR-1);
+	assign start_verif_tick = (baud_cnt == DIVISOR/2);
 	
 	always_ff @(posedge clk or negedge rst_) begin
 		
@@ -47,7 +48,7 @@ output	logic			rx_error
 				end
 				
 				START: begin
-					if(baud_cnt == DIVISOR/2) begin
+					if(start_verif_tick) begin
 						if(!rx_serial)
 							state <= DATA;
 						else begin
