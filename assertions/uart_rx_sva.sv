@@ -24,7 +24,7 @@ reset_checkC: cover property (reset_check) $display($stime,"\t\t PASS::reset_che
 
 property start_check;
 	@(posedge clk) disable iff(!rst_)
-		(rx_serial |-> ##1 `state == uart_rx_tb.my_uart.START);
+		(!rx_serial |-> ##1 `state == uart_rx_tb.my_uart.START);
 endproperty
 start_checkP: assert property (start_check) else $display($stime,"\t\t FAIL::start_check\n");
 start_checkC: cover property (start_check) $display($stime,"\t\t PASS::start_check\n");
