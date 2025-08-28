@@ -20,6 +20,8 @@ output	logic			rx_error
 	logic	[7:0]	shifter;
 	logic			sample_tick;
 	
+	assign sample_tick = (baud_cnt == DIVISOR-1);
+	
 	always_ff @(posedge clk or negedge rst_) begin
 		
 		if(!rst_) begin
@@ -48,15 +50,17 @@ output	logic			rx_error
 					if(baud_cnt == DIVISOR/2) begin
 						if(!rx_serial)
 							state <= DATA;
-						else 
+						else begin
 							state <= IDLE;
+							rx_error <= 1;
+						end
 						baud_cnt <= 0;
 					end else
 						baud_cnt <= baud_cnt + 1;
 				end
 				
 				DATA: begin
-					if(baud_cnt == DIVISOR-1) begin
+					if(sample_tick) begin
 						baud_cnt <= 0;
 						shifter <= {rx_serial,shifter[7:1]};
 						if(bit_index == 3'b111)
@@ -68,7 +72,7 @@ output	logic			rx_error
 				end
 				
 				STOP: begin
-					if(baud_cnt == DIVISOR-1) begin
+					if(sample_tick) begin
 						if(rx_serial) begin
 							rx_data <= shifter;
 							rx_valid <= 1;

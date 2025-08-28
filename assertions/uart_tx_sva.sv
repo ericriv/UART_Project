@@ -16,11 +16,9 @@ input	logic			tx_serial,
 input	logic			tx_busy
 );
 
-localparam	int	DIVISOR = CLK_FREQ/BAUD_RATE;
-
 property reset_check;
 	@(posedge clk)
-		(!rst_ |-> (tx_serial && !tx_busy && `state == 2'b0 && `baud_cnt == 0 && `shifter == 0 && `bit_index == 0));
+		(!rst_ |-> (tx_serial && !tx_busy && `state == uart_tx_tb.my_uart.IDLE && `baud_cnt == 0 && `shifter == 0 && `bit_index == 0));
 endproperty
 reset_checkP: assert property (reset_check) else $display($stime,"\t\t FAIL::reset_check\n");
 reset_checkC: cover property (reset_check) $display($stime,"\t\t PASS::reset_check\n");
@@ -34,14 +32,14 @@ idle_high_checkC: cover property (idle_high_check) $display($stime,"\t\t PASS::i
 
 property start_bit_check;
 	@(posedge clk) disable iff(!rst_)
-		(`baud_tick && `state == 2'b01 |-> !tx_serial);
+		(`baud_tick && `state == uart_tx_tb.my_uart.START |-> !tx_serial);
 endproperty
 start_bit_checkP: assert property (start_bit_check) else $display($stime,"\t\t FAIL::start_bit_check\n");
 start_bit_checkC: cover property (start_bit_check) $display($stime,"\t\t PASS::start_bit_check\n");
 
 property stop_bit_check;
 	@(posedge clk) disable iff(!rst_)
-		(`baud_tick && `state == 2'b11 |-> tx_serial);
+		(`baud_tick && `state == uart_tx_tb.my_uart.STOP |-> tx_serial);
 endproperty
 stop_bit_checkP: assert property (stop_bit_check) else $display($stime,"\t\t FAIL::stop_bit_check\n");
 stop_bit_checkC: cover property (stop_bit_check) $display($stime,"\t\t PASS::stop_bit_check\n");
@@ -55,7 +53,7 @@ stable_bit_checkC: cover property (stable_bit_check) $display($stime, "\t\t PASS
 
 property busy_check;
 	@(posedge clk) disable iff(!rst_)
-		(tx_start |-> ##1 (tx_busy throughout (`state != 2'b00)));
+		(tx_start |-> ##1 (tx_busy throughout (`state != uart_tx_tb.my_uart.IDLE)));
 endproperty
 busy_checkP: assert property (busy_check) else $display($stime, "\t\t FAIL::busy_check\n");
 busy_checkC: cover property (busy_check) $display($stime, "\t\t PASS::busy_check\n");

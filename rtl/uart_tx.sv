@@ -48,7 +48,7 @@ output	logic			tx_busy
 			
 			START: begin
 				tx_serial <= 0;	//drive low to START
-				if(baud_cnt == DIVISOR-1) begin
+				if(baud_tick) begin
 					state <= DATA;
 					bit_index <= 0;
 					baud_cnt <= 0;
@@ -58,7 +58,7 @@ output	logic			tx_busy
 			
 			DATA: begin
 				tx_serial <= shifter[0];
-				if(baud_cnt == DIVISOR-1) begin
+				if(baud_tick) begin
 					baud_cnt <= 0;
 					shifter <= {1'b0, shifter[7:1]};
 					if(bit_index == 3'b111)
@@ -71,7 +71,7 @@ output	logic			tx_busy
 			
 			STOP: begin
 				tx_serial <= 1; //drive high to end
-				if(baud_cnt == DIVISOR-1) begin
+				if(baud_tick) begin
 					state <= IDLE;
 					baud_cnt <= 0;
 					tx_busy <= 0;
