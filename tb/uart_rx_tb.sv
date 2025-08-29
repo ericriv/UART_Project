@@ -39,7 +39,7 @@ module uart_rx_tb;
 	restart_uart;
 	//bug injection direct test
 	bad_start;
-	
+	bad_stop;
 	repeat(5) @(posedge clk);
 	$stop;
 	end //initial
@@ -78,8 +78,21 @@ module uart_rx_tb;
 			shifter = {1'b1,shifter[9:1]};
 		end
 		@(posedge rx_valid or posedge rx_error)
-			if(rx_data != val) $error("Scoreboard mismatch! Expected %0d, got %0d", val, rx_data);
+			if(rx_data != val) $error("Scoreboard mismatch! Expected %0d, got %0d. rx_error = %b", val, rx_data, rx_error);
 		@(posedge baud_tick);
+	endtask
+	
+	task automatic bad_stop;
+		logic	[9:0]	shifter;
+		shifter = {1'b0,8'hff,1'b0}; //{bad_stop,val,start}
+		baud_cnt = 0;
+		rx_serial = shifter[0];
+		shifter = {1'b1,shifter[9:1]};
+		repeat(9) @(posedge baud_tick) begin
+			rx_serial = shifter[0];
+			shifter = {1'b1,shifter[9:1]};
+		end
+		repeat(2) @(posedge baud_tick);
 	endtask
 	
 	task automatic bad_start;

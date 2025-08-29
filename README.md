@@ -25,7 +25,7 @@ This project demonstrates RTL design skills and SystemVerilog/UVM verification p
 - **Full Duplex UART**
   - Integrated TX and RX with shared baud generator
   - Supports simultaneous transmission and reception
-  - Ports: `clk, rst_, tx_start, tx_data, tx_serial, rx_serial, rx_data, rx_valid, rx_error`
+  - Ports: `clk, rst_, tx_start, tx_data, tx_serial, tx_busy, rx_serial, rx_data, rx_valid, rx_error`
 
 
 ## Verification Objectives
@@ -65,8 +65,9 @@ This project demonstrates RTL design skills and SystemVerilog/UVM verification p
   
 ## Status
 - [x] UART TX RTL + directed testbench
-- [ ] UART RX RTL + directed testbench
-- [ ] UART Full Duplex RTL + UVM testbench
+- [x] UART RX RTL + directed testbench
+- [ ] UART Full Duplex RTL + directed testbench 
+- [ ] UVM testbench
 - [ ] Randomized testing + coverage collection
 
 
