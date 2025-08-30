@@ -89,7 +89,7 @@ property idle_high_check;
 		(!tx_busy |-> tx_serial);
 endproperty
 idle_high_checkP: assert property (idle_high_check) else $display($stime,"\t\t FAIL::idle_high_check\n");
-idle_high_checkC: cover property (idle_high_check) $display($stime,"\t\t PASS::idle_high_check\n");
+//idle_high_checkC: cover property (idle_high_check) $display($stime,"\t\t PASS::idle_high_check\n");
 
 property start_bit_check;
 	@(posedge clk) disable iff(!rst_)
