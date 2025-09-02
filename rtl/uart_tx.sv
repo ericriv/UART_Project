@@ -71,12 +71,9 @@ output	logic			tx_busy
 			
 			STOP: begin
 				tx_serial <= 1; //drive high to end
-				if(baud_tick) begin
-					state <= IDLE;
-					baud_cnt <= 0;
-					tx_busy <= 0;
-				end else
-					baud_cnt = baud_cnt + 1;
+				state <= IDLE;
+				baud_cnt <= 0;
+				tx_busy <= 0;
 			end //STOP
 			
 			endcase

@@ -66,9 +66,10 @@ This project demonstrates RTL design skills and SystemVerilog/UVM verification p
 ## Status
 - [x] UART TX RTL + directed testbench
 - [x] UART RX RTL + directed testbench
-- [ ] UART Full Duplex RTL + directed testbench 
+- [x] UART Full Duplex RTL + directed testbench 
 - [ ] UVM testbench
-- [ ] Randomized testing + coverage collection
+- [x] Randomized testing + coverage collection
+- [ ] Quartus custom IP core
 
 
 ## Future Work
