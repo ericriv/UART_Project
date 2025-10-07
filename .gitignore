@@ -14,6 +14,7 @@ transcript
 *.log
 sim/*.log
 sim/uvm/*
+sim/certe_dump.xml
 *.out
 
 # ----------------------------
