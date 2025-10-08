@@ -20,7 +20,7 @@ class uart_tx_env extends uvm_env;
 
 	function void connect_phase(uvm_phase phase);
 		drv.seq_item_port.connect(seqr.seq_item_export);
-		mon.ap.connect(sb.act_export);
-		drv.ap.connect(sb.exp_export);
+		mon.ap.connect(sb.act_imp);
+		drv.ap.connect(sb.exp_imp);
 	endfunction
 endclass

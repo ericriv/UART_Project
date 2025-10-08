@@ -15,14 +15,6 @@ module uart_tx_tb;
 		.tx_serial(uif.tx_serial),
 		.tx_busy(uif.tx_busy)
 	);
-  
-  /*
-	initial begin
-		uif.rst_ = 0;
-		repeat(5) @(posedge clk);
-		uif.rst_ = 1;
-	end
-  */
 
 	initial begin
 		divisor = my_uart.CLK_FREQ / my_uart.BAUD_RATE;

@@ -32,17 +32,11 @@ class uart_tx_driver extends uvm_driver #(uart_tx_txn);
 	endtask
 
 	task drive_txn(uart_tx_txn tr);
-		/*
-		if (!vif.rst_) begin
-			`uvm_warning("DRIVER", "Transaction received during reset — dropped");
-			return;
-		end
-		*/
 		vif.cb.tx_data <= tr.data;
 		vif.cb.tx_start <= 1;
 		@(vif.cb);
 		vif.cb.tx_start <= 0;
 		@(vif.cb);
-		wait (!vif.cb.tx_busy);// Optionally wait for tx_busy to deassert here
+		wait (!vif.cb.tx_busy);
 	endtask
 endclass
